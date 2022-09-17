@@ -107,6 +107,7 @@ class Game {
     var deadHumanTeam: [HumanForces] = []
     var monstersTeam: [MonsterForces] = []
     var deadMonstersTeam: [MonsterForces] = []
+    var moves: Int = 0
 
     func createHeroTeam() {
         for _ in 0..<15 {
@@ -115,7 +116,7 @@ class Game {
         for _ in 0..<7 {
             humanTeam.append(Hunter())
         }
-        for _ in 0..<12 {
+        for _ in 0..<8 {
             humanTeam.append(Knight())
         }
         for _ in 0..<10 {
@@ -149,51 +150,54 @@ class Game {
     
     func startGame(){
         print("\nИгра началась \n")
+        game.explore()
         
         while (humanTeam.count > 1) || (monstersTeam.count > 1) {
             
             if (humanTeam.count > 1) && (monstersTeam.count > 1) {
-                for i in 0..<humanTeam.count-2 {
-                    for j in 0..<monstersTeam.count-2 {
+                for i in 0..<humanTeam.count {
+                    for j in 0..<monstersTeam.count {
                         var human: HumanForces = humanTeam[Int.random(in: 0..<humanTeam.count)]
                         var monster: MonsterForces = monstersTeam[Int.random(in: 0..<monstersTeam.count)]
                         if human.classType == .wizard {
-                            humanTeam[Int.random(in: 0..<humanTeam.count)].hp += 40
+                            humanTeam[Int.random(in: 0..<humanTeam.count)].hp += 50
                             human.mp -= 20
-                            print("\(human.classType.rawValue): \(human.name) подлечил союзника")
+                            monster.hp -= 20
+                            print("\(human.classType.rawValue)\(human.name) подлечил союзника")
                         }
                         if (human.classType == .knight) && (human.mp > 0) {
                             if human.hp < 150 {
                                 human.hp += 70
                                 human.mp = 0
-                                print("\(human.classType.rawValue): \(human.name) подлечил себя")
+                                print("\(human.classType.rawValue)\(human.name) подлечил себя")
                             } else {
                                 humanTeam[Int.random(in: 0..<humanTeam.count)].hp += 70
-                                print("\(human.classType.rawValue): \(human.name) подлечил союзника")
+                                print("\(human.classType.rawValue)\(human.name) подлечил союзника")
                             }
                         }
-                        monster.hp -= human.damage
-                        print("\(human.classType.rawValue) \(human.name) ударяет \(monster.classType.rawValue)\(monster.name) с силой \(human.damage), HP=\(monster.hp)\n")
-                        human.hp -= monster.damage
-                        print("\(monster.classType.rawValue) \(monster.name) ударяет \(human.classType.rawValue)\(human.name) с силой \(monster.damage), HP=\(human.hp)")
                         
-                        if monster.hp < 0 {
-                            deadMonstersTeam.append(monster)
-                            monstersTeam.remove(at: j)
-                        }
                         if human.hp < 0 {
                             deadHumanTeam.append(human)
                             humanTeam.remove(at: i)
                         }
+                        monster.hp -= human.damage
+                        print("\(human.classType.rawValue)\(human.name) ударяет \(monster.classType.rawValue)\(monster.name) с силой \(human.damage), HP=\(monster.hp)\n")
+                        if monster.hp < 0 {
+                            deadMonstersTeam.append(monster)
+                            monstersTeam.remove(at: j)
+                        }
+                        human.hp -= monster.damage
+                        print("\(monster.classType.rawValue)\(monster.name) ударяет \(human.classType.rawValue)\(human.name) с силой \(monster.damage), HP=\(human.hp)")
+                        moves += 1
                     }
                 }
             }
-            if humanTeam.count <= 1 {
-                print("Люди проиграли")
+            if humanTeam.count == 0 {
+                print("Люди проиграли за \(moves) ходов")
                 break
             }
-            if monstersTeam.count <= 1 {
-                print("Люди победили")
+            if monstersTeam.count == 0 {
+                print("Люди победили за \(moves) ходов")
                 break
             }
         }
