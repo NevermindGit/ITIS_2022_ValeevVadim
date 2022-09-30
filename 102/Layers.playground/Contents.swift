@@ -1,4 +1,3 @@
-mport UIKit
 import PlaygroundSupport
 // PlaygroundPage.current.needsIndefiniteExecution = true
 let size100 = CGSize(width: 100, height: 100)
