@@ -1,11 +1,13 @@
+import UIKit
 import PlaygroundSupport
 // PlaygroundPage.current.needsIndefiniteExecution = true
+
 let size100 = CGSize(width: 100, height: 100)
 let view = UIView()
 view.backgroundColor = .blue
 view.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
 PlaygroundPage.current.liveView = view
- 
+
 let layer = view.layer
 let squareLayer = CALayer()
 squareLayer.frame = CGRect(
@@ -14,7 +16,7 @@ squareLayer.frame = CGRect(
 )
 squareLayer.backgroundColor = UIColor.red.cgColor
 layer.addSublayer(squareLayer)
- 
+
 let circleLayer = CALayer()
 circleLayer.backgroundColor = UIColor.gray.cgColor
 circleLayer.frame = CGRect(
@@ -28,7 +30,7 @@ circleLayer.frame.origin = CGPoint(
     y: view.center.y
         - circleLayer.frame.height * 0.5
 )
- 
+
 let gradientLayer = CAGradientLayer()
 gradientLayer.startPoint = .zero
 gradientLayer.endPoint = CGPoint(x: 1, y: 1)
@@ -39,7 +41,7 @@ gradientLayer.colors = [
 ]
 gradientLayer.frame = layer.bounds
 layer.addSublayer(gradientLayer)
- 
+
 // CALayer, CAGradientLayer
 // let textLayer = CATextLayer()
 /*
@@ -52,6 +54,6 @@ layer.addSublayer(gradientLayer)
  [label setForegroundColor:[[UIColor whiteColor] CGColor]];
  [layer addSublayer:label];
  */
- 
+
 let shapeLayer = CAShapeLayer()
 // shapeLayer.path
