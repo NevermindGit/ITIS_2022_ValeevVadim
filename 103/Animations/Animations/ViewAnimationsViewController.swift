@@ -1,85 +1,105 @@
 //
-//  ViewAnimationsViewController.swift
-//  Animations
+//  AdvertismentViewController.swift
+//  HW3
 //
-//  Created by Amir Zigangarayev on 24.09.2022.
+//  Created by Vadim Valeev on 30.09.2022.
 //
-
+ 
 import UIKit
-
-class ViewAnimationsViewController: UIViewController {
+ 
+// Iphone 14 pro
+class AdvertismentViewController: UIViewController {
+    private let animationView: UIView = .init()
+    private let button: UIButton = .init(frame: CGRect(x: 50, y: 500, width: 300, height: 100))
+    private let banner: UIImageView = .init(image: UIImage(named: "banner"))
+    private let label: UILabel = .init()
+ 
+ 
+ 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setup()
-        NotificationCenter.default.addObserver(
-            self, selector: #selector(reanimate),
-            name: UIApplication.willEnterForegroundNotification,
-            object: nil
-        )
     }
-
-    @objc func reanimate() {
-        animate()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        animate()
-    }
-
-    private let animatingView: UIView = .init()
-    private let label: UILabel = .init()
-
-    private func setup() {
-        view.addSubview(animatingView)
-        view.backgroundColor = .orange
-        animatingView.frame = CGRect(x: 50, y: 50, width: 100, height: 100)
-        animatingView.backgroundColor = .blue
-
+ 
+ 
+    private func setup(){
+        view.addSubview(animationView)
+        view.backgroundColor = .yellow
+        animationView.frame = CGRect(x: 0, y: 50, width: 400, height: 300)
+        animationView.backgroundColor = .magenta
+        animationView.addSubview(banner)
+        banner.frame = CGRect(x: 10, y: 20, width: 375, height: 250)
+ 
+        label.frame = CGRect(x: 30, y: 350, width: 350, height: 210)
+        label.text = "НАЖМИ НА КНОПКУ ЧТОБЫ ПОЛУЧИТЬ 10000!"
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        label.textColor = .blue
+        label.font = UIFont.boldSystemFont(ofSize: 20)
+ 
+ 
         view.addSubview(label)
-        label.text = "Hello world"
-        label.font = .systemFont(ofSize: 70)
-        label.sizeToFit()
-        label.frame.origin = CGPoint(x: 50, y: 30)
+ 
+        button.addTarget(
+            self,
+            action: #selector(buttonDidTap),
+            for: .touchDown
+        )
+        button.tag = 1
+        button.setTitle("Забрать 10000!", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
+        button.setTitleColor(.red, for: .normal)
+        button.backgroundColor = .green
+        view.addSubview(button)
     }
-
+ 
     private func animate() {
         UIView.animate(
-            withDuration: 0.3,
+            withDuration: 0.5,
             delay: 0,
-            options: [ .repeat, .autoreverse ]
-        ) { [self] in
-            label.frame.origin.x = 40
+            options: [.repeat, .autoreverse]
+        ) {[self] in
+            label.frame.origin.x = 50
+            label.frame.origin.x = 0
         }
-
+ 
         UIView.animateKeyframes(
-            withDuration: 5,
+            withDuration: 0.5,
             delay: 0,
             options: [ .repeat, .autoreverse ]
         ) { [self] in
-            UIView.addKeyframe(
-                withRelativeStartTime: 0, relativeDuration: 0.5
+            button.frame.origin.x = 0
+            button.frame.origin.x = 100
+        }
+ 
+        UIView.animateKeyframes(
+            withDuration: 0.5,
+            delay: 0,
+            options: [.repeat, .autoreverse]
+        ) { [self] in
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 5
             ) { [self] in
-                animatingView.backgroundColor = .magenta
+                animationView.frame.origin.y = 125
             }
-            UIView.addKeyframe(
-                withRelativeStartTime: 0.25, relativeDuration: 0.25
-            ) { [self] in
-                animatingView.frame.origin.y = 100
-            }
-            UIView.addKeyframe(
-                withRelativeStartTime: 0.5, relativeDuration: 0.25
-            ) { [self] in
-                animatingView.frame.origin.y = 150
-                animatingView.frame.size = CGSize(width: 200, height: 200)
-            }
-            UIView.addKeyframe(
-                withRelativeStartTime: 0.75, relativeDuration: 0.25
-            ) { [self] in
-                animatingView.frame.size = CGSize(width: 300, height: 300)
-            }
+        }
+        let basicAnimation = CABasicAnimation(keyPath: "backgroundColor")
+        basicAnimation.fromValue = UIColor.yellow.cgColor
+        basicAnimation.toValue = UIColor.red.cgColor
+        basicAnimation.duration = 1
+        basicAnimation.beginTime = CACurrentMediaTime()
+        basicAnimation.autoreverses = true
+ 
+        view.layer.add(basicAnimation, forKey: "backgroundColor")
+ 
+    }
+ 
+    @objc func buttonDidTap(_ sender: UIButton!) {
+        let btnSendTag: UIButton = sender
+        if btnSendTag.tag == 1 {
+            button.setTitle("ПОПАЛСЯ МАМОНТ!", for: .normal)
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 25)
+            animate()
         }
     }
 }
+ 
